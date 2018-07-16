@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ColaboraCity</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
+    <string name="first_name">Primeiro Nome</string>
+    <string name="last_name">Último Nome</string>
+    <string name="login_title">Login</string>
+    <string name="create_act">Criar Conta</string>
+    <string name="exit">Sair</string>
+    <string name="send_password_reset_email">Enviar email de reset de senha</string>
 </resources>
