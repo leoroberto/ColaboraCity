@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "746592516940",
+    "firebase_url": "https://colaboracity.firebaseio.com",
+    "project_id": "colaboracity",
+    "storage_bucket": "colaboracity.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746592516940:android:14a888fa2af0560c",
+        "android_client_info": {
+          "package_name": "br.com.lfsolucoes.colaboracity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746592516940-7cnd49uru8oiav0ot3vbphm4glq15nsu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.lfsolucoes.colaboracity",
+            "certificate_hash": "80939dd3dd0da306a49da2becbcfff11f498ffe1"
+          }
+        },
+        {
+          "client_id": "746592516940-ad5dhj56lt546va95jc6r2g39olk78sq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXtS3Ak2RW-y6Tuwq0ERyJGxnzgkI45XU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746592516940-ad5dhj56lt546va95jc6r2g39olk78sq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
