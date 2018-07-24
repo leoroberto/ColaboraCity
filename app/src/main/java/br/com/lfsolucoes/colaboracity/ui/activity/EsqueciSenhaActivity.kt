@@ -1,4 +1,4 @@
-package br.com.lfsolucoes.colaboracity
+package br.com.lfsolucoes.colaboracity.ui.activity
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import br.com.lfsolucoes.colaboracity.R
 import com.google.firebase.auth.FirebaseAuth
 
 class EsqueciSenhaActivity : AppCompatActivity() {

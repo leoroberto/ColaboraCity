@@ -1,4 +1,4 @@
-package br.com.lfsolucoes.colaboracity
+package br.com.lfsolucoes.colaboracity.ui.activity
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -10,11 +10,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import br.com.lfsolucoes.colaboracity.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
-class CriarConta : AppCompatActivity() {
+class CriarContaActivity : AppCompatActivity() {
 
     private var etFirstName: EditText? = null
     private var etLastName: EditText? = null
@@ -94,7 +95,7 @@ class CriarConta : AppCompatActivity() {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(this@CriarConta, "Autenticação Falha.",
+                            Toast.makeText(this@CriarContaActivity, "Autenticação Falha.",
                                     Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -107,7 +108,7 @@ class CriarConta : AppCompatActivity() {
     private fun updateUserInfoAndUI() {
 
         //start next activity
-        val intent = Intent(this@CriarConta, MainActivity::class.java)
+        val intent = Intent(this@CriarContaActivity, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
     }
@@ -118,12 +119,12 @@ class CriarConta : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
 
                     if (task.isSuccessful) {
-                        Toast.makeText(this@CriarConta,
+                        Toast.makeText(this@CriarContaActivity,
                                 "Verificação de email enviada para " + mUser.getEmail(),
                                 Toast.LENGTH_SHORT).show()
                     } else {
                         Log.e(TAG, "sendEmailVerification", task.exception)
-                        Toast.makeText(this@CriarConta,
+                        Toast.makeText(this@CriarContaActivity,
                                 "Falha ao enviar verificação de email.",
                                 Toast.LENGTH_SHORT).show()
                     }

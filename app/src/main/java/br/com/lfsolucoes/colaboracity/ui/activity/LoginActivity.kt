@@ -1,4 +1,4 @@
-package br.com.lfsolucoes.colaboracity
+package br.com.lfsolucoes.colaboracity.ui.activity
 
 import android.app.ProgressDialog
 import android.content.Intent
@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import br.com.lfsolucoes.colaboracity.R
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
@@ -51,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
                         EsqueciSenhaActivity::class.java)) }
         btnCreateAccount!!
                 .setOnClickListener { startActivity(Intent(this@LoginActivity,
-                        CriarConta::class.java)) }
+                        CriarContaActivity::class.java)) }
         btnLogin!!.setOnClickListener { loginUser() }
     }
 
