@@ -3,10 +3,14 @@ package br.com.lfsolucoes.colaboracity.ui.activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.widget.Button
 import br.com.lfsolucoes.colaboracity.R
+import br.com.lfsolucoes.colaboracity.model.Problem
+import br.com.lfsolucoes.colaboracity.ui.adapter.ProblemListAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +24,20 @@ class MainActivity : AppCompatActivity() {
         val btnSair = findViewById<Button>(R.id.btn_sair)
         btnSair!!.setOnClickListener { logoutUser() }
 
+        val recyclerView = problem_list_recyclerview
+        recyclerView.adapter = ProblemListAdapter(problems(), this)
+        val layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
+    }
+
+    private fun problems(): List<Problem> {
+        return listOf(
+                Problem("Leitura",
+                        "Livro de Kotlin com Android"),
+                Problem("Pesquisa",
+                        "Como posso melhorar o código dos meus projetos"),
+                Problem("Estudo",
+                        "Como sincronizar minha App com um Web Service"))
     }
 
     override fun onStart() {
