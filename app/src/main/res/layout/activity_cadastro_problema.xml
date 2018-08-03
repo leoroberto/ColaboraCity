@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <EditText
+        android:id="@+id/problema"
+        style="@style/viewCustom"
+        android:layout_below="@id/toolbar"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Digite o problema" />
+
+    <EditText
+        android:id="@+id/Nome"
+        style="@style/viewCustom"
+        android:layout_below="@id/problema"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Name" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/Nome"
+        android:layout_centerHorizontal="true"
+        android:text="Cadastrar" />
+
+
+</RelativeLayout>

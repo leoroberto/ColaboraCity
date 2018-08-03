@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".ui.activity.CriarContaActivity" />
         <activity android:name=".ui.activity.EsqueciSenhaActivity" />
-        <activity android:name=".ui.activity.LoginActivity"></activity>
+        <activity android:name=".ui.activity.LoginActivity" />
+        <activity android:name=".ui.activity.CadastroProblemaActivity"></activity>
     </application>
 
 </manifest>

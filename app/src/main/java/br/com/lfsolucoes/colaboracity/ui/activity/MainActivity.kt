@@ -95,7 +95,8 @@ class MainActivity : AppCompatActivity() {
             toast("Clicou no Settings!")
             return true
         } else if(id == R.id.action_add){
-            criarJanelaDeCadastro()
+            startActivity(Intent(this@MainActivity, CadastroProblemaActivity::class.java))
+            //criarJanelaDeCadastro()
         }
         return super.onOptionsItemSelected(item)
     }
