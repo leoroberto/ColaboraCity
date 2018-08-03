@@ -8,4 +8,9 @@
     <string name="create_act">Criar Conta</string>
     <string name="exit">Sair</string>
     <string name="send_password_reset_email">Enviar email de reset de senha</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
+    <string name="action_share">Share</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_add">Adicionar</string>
 </resources>
