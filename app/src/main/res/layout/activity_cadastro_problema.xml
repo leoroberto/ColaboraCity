@@ -24,11 +24,43 @@
         android:inputType="textPersonName"
         android:hint="Name" />
 
+    <ImageButton
+        android:id="@+id/btAbrirCamera"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/Nome"
+        android:src="@android:drawable/ic_menu_camera"
+        android:text="Abrir a Camera" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/btAbrirCamera"
+        android:layout_weight="0"
+        android:background="#000000" />
+
+    <ImageView
+        android:id="@+id/imagemCam"
+        android:layout_below="@id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center" />
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="fill_parent"
+        android:layout_below="@id/imagemCam"
+        android:layout_height="1dp"
+        android:layout_weight="0"
+        android:background="#000000" />
+
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/Nome"
+        android:layout_below="@id/line2"
         android:layout_centerHorizontal="true"
         android:text="Cadastrar" />
 
