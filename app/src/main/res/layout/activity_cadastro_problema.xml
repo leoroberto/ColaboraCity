@@ -1,77 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:card_view="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
+            <!-- CardView com a descrição do Carro -->
 
-    <!-- Toolbar -->
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
+            <!-- Toolbar -->
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar" />
 
-    <EditText
-        android:id="@+id/problema"
-        style="@style/viewCustom"
-        android:layout_below="@id/toolbar"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Digite o problema" />
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_marginTop="10dp"
+                app:cardElevation="3dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="false"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="6dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp">
+                    <!-- Desc -->
 
-    <EditText
-        android:id="@+id/Nome"
-        style="@style/viewCustom"
-        android:layout_below="@id/problema"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Name" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Campos para Preenchimento"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/tDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:ellipsize="end"
+                        android:textSize="16sp" />
 
-    <ImageButton
-        android:id="@+id/btAbrirCamera"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_below="@id/Nome"
-        android:src="@android:drawable/ic_menu_camera"
-        android:text="Abrir a Camera" />
+                    <EditText
+                        android:id="@+id/problema"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:hint="Digite o problema"
+                        android:textSize="16sp" />
 
-    <View
-        android:id="@+id/line1"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/btAbrirCamera"
-        android:layout_weight="0"
-        android:background="#000000" />
+                    <EditText
+                        android:id="@+id/Nome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:hint="Name"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <!-- CardView com a Imagem -->
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                app:cardElevation="3dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="false"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="6dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!-- Video -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Foto"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp">
+                        <ImageView
+                            android:id="@+id/imagemCam"
+                            android:layout_width="@dimen/foto_carro_width"
+                            android:layout_height="@dimen/foto_carro_height"
+                            android:layout_gravity="center"
+                            android:alpha="0.5" />
+                        <ImageButton
+                            android:id="@+id/btAbrirCamera"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@android:drawable/ic_menu_camera"
+                            android:text="Abrir a Camera" />
+                    </FrameLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <!-- CardView com o Mapa -->
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:layout_marginBottom="10dp"
+                app:cardElevation="3dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="false"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="6dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <!-- Mapa -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Localização"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                    <!-- No capítulo sobre Mapas vamos colocar um mapa aqui -->
+                        />
+                    <fragment
+                        android:id="@+id/map"
+                        class="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="320dp"
+                        android:layout_margin="16dp"
+                        />
 
-    <ImageView
-        android:id="@+id/imagemCam"
-        android:layout_width="match_parent"
-        android:layout_height="188dp"
-        android:layout_below="@id/line1"
-        android:layout_gravity="center"
-        android:layout_weight="1" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-    <View
-        android:id="@+id/line2"
-        android:layout_width="fill_parent"
-        android:layout_below="@id/imagemCam"
-        android:layout_height="1dp"
-        android:layout_weight="0"
-        android:background="#000000" />
-
-    <fragment
-        android:id="@+id/map"
-        class="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/line2" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/map"
-        android:layout_centerHorizontal="true"
-        android:text="Cadastrar" />
-
-
-</RelativeLayout>
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Cadastrar" />
+        </LinearLayout>
+</ScrollView>
