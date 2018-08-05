@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <!-- Toolbar -->
     <include
@@ -42,11 +44,11 @@
 
     <ImageView
         android:id="@+id/imagemCam"
-        android:layout_below="@id/line1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="center" />
+        android:layout_height="188dp"
+        android:layout_below="@id/line1"
+        android:layout_gravity="center"
+        android:layout_weight="1" />
 
     <View
         android:id="@+id/line2"
@@ -56,11 +58,18 @@
         android:layout_weight="0"
         android:background="#000000" />
 
+    <fragment
+        android:id="@+id/map"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line2" />
+
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/line2"
+        android:layout_below="@id/map"
         android:layout_centerHorizontal="true"
         android:text="Cadastrar" />
 

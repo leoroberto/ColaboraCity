@@ -1,27 +1,49 @@
 package br.com.lfsolucoes.colaboracity.ui.activity
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.location.Location
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.FileProvider
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import br.com.lfsolucoes.colaboracity.R
 import br.com.lfsolucoes.colaboracity.utils.ImageUtils
+import br.com.lfsolucoes.colaboracity.utils.PermissionUtils
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CircleOptions
+import com.google.android.gms.maps.model.LatLng
 import java.io.File
 
-class CadastroProblemaActivity : AppCompatActivity() {
+class CadastroProblemaActivity : AppCompatActivity(), OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     // Caminho para salvar o arquivo
     var file: File? = null
     val imgView: ImageView by lazy  { findViewById<ImageView>(R.id.imagemCam)}
+    var map: GoogleMap? = null
+    var mapFragment: SupportMapFragment? = null
+    var mGoogleApiClient: GoogleApiClient? = null
+    private val TAG = "ColaboraCity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +56,7 @@ class CadastroProblemaActivity : AppCompatActivity() {
         // Agora podemos continuar usando a action bar normalmente
         supportActionBar?.title = "Cadastrar Problema"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val context = this
         val b = findViewById<View>(R.id.btAbrirCamera)
         b.setOnClickListener {
@@ -54,6 +77,26 @@ class CadastroProblemaActivity : AppCompatActivity() {
             file = savedInstanceState.getSerializable("file") as File
             showImage(file)
         }
+
+        mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment?.getMapAsync(this)
+
+        // Configura o objeto GoogleApiClient
+        mGoogleApiClient = GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build()
+
+        // Solicita as permissões
+        PermissionUtils.validate(this, 0,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+
+
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -105,5 +148,113 @@ class CadastroProblemaActivity : AppCompatActivity() {
 
     fun toast(s: String) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        for (result in grantResults) {
+            if (result == PackageManager.PERMISSION_DENIED) {
+                // Alguma permissão foi negada, agora é com você :-)
+                alertAndFinish()
+                return
+            }
+        }
+        // Se chegou aqui está OK :-)
+    }
+
+    private fun alertAndFinish() {
+        run {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle(R.string.app_name).setMessage("Para utilizar este aplicativo, você precisa aceitar as permissões.")
+            // Add the buttons
+            builder.setPositiveButton("OK") { dialog, id -> finish() }
+            val dialog = builder.create()
+            dialog.show()
+
+        }
+    }
+
+    override fun onMapReady(map: GoogleMap) {
+        Log.d(TAG, "onMapReady: " + map)
+        this.map = map
+
+        // Configura o tipo do mapa
+        map.mapType = GoogleMap.MAP_TYPE_NORMAL
+
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // Conecta no Google Play Services
+        mGoogleApiClient?.connect()
+    }
+
+    override fun onStop() {
+        // Desconecta
+        mGoogleApiClient?.disconnect()
+        super.onStop()
+    }
+
+    override fun onConnected(bundle: Bundle?) {
+        toast("Conectado no Google Play Services!")
+        getLastLocation()
+    }
+
+    override fun onConnectionSuspended(cause: Int) {
+        toast("Conexão interrompida.")
+    }
+
+    override fun onConnectionFailed(connectionResult: ConnectionResult) {
+        toast("Erro ao conectar: " + connectionResult)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun getLastLocation() {
+
+        val fusedClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Verifica permissões
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Este "if" o Android Studio pede para colocar.
+            // Alguma permissão foi negada, agora é com você :-)
+            alertAndFinish()
+            return
+        }
+
+        // Fused Location Provider API
+        fusedClient.lastLocation
+                .addOnSuccessListener { location ->
+                    // Atualiza a localização do mapa
+                    setMapLocation(location)
+                }
+                .addOnFailureListener {
+                    Log.d(TAG, "Não foi possível ao buscar a localização do GPS")
+                }
+    }
+
+    // Atualiza a coordenada do mapa
+    private fun setMapLocation(l: Location) {
+        if (map != null) {
+            val latLng = LatLng(l.latitude, l.longitude)
+            val update = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
+            map?.animateCamera(update)
+
+            Log.d(TAG, "setMapLocation: " + l)
+            //val text = findViewById<TextView>(R.id.text)
+            //text.text = String.format("Lat/Lnt: ${l.latitude}/${l.longitude}, provider: ${l.provider}")
+
+            // Desenha uma bolinha vermelha
+            val circle = CircleOptions().center(latLng)
+            circle.fillColor(Color.RED)
+            circle.radius(25.0) // Em metros
+            map?.clear()
+            map?.addCircle(circle)
+        }
     }
 }
