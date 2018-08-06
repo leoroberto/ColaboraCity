@@ -2,6 +2,7 @@ package br.com.lfsolucoes.colaboracity.ui.activity
 
 import android.Manifest
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -14,16 +15,22 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
+import android.util.Base64
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import br.com.lfsolucoes.colaboracity.R
 import br.com.lfsolucoes.colaboracity.utils.ImageUtils
 import br.com.lfsolucoes.colaboracity.utils.PermissionUtils
+import com.firebase.geofire.GeoFire
+import com.firebase.geofire.GeoLocation
+import com.firebase.geofire.GeoQuery
+import com.firebase.geofire.GeoQueryEventListener
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
@@ -33,6 +40,11 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import java.io.File
 
 class CadastroProblemaActivity : AppCompatActivity(), OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -44,6 +56,13 @@ class CadastroProblemaActivity : AppCompatActivity(), OnMapReadyCallback, Google
     var mapFragment: SupportMapFragment? = null
     var mGoogleApiClient: GoogleApiClient? = null
     private val TAG = "ColaboraCity"
+    var fbUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    var latitude : Double = 0.0
+    var longitude : Double = 0.0
+    var file64 : String = ""
+    var geofire : GeoFire? = null
+    private var mProgressBar: ProgressDialog? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +77,7 @@ class CadastroProblemaActivity : AppCompatActivity(), OnMapReadyCallback, Google
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val context = this
+        mProgressBar = ProgressDialog(this)
         val b = findViewById<View>(R.id.btAbrirCamera)
         b.setOnClickListener {
             // (*1*) Cria o caminho do arquivo no sdcard
@@ -70,6 +90,12 @@ class CadastroProblemaActivity : AppCompatActivity(), OnMapReadyCallback, Google
             val uri = FileProvider.getUriForFile(context, context.applicationContext.packageName + ".provider", f)
             i.putExtra(MediaStore.EXTRA_OUTPUT, uri)
             startActivityForResult(i, 0)
+        }
+
+        val btnCadastrar = findViewById<View>(R.id.button)
+
+        btnCadastrar.setOnClickListener{
+            cadastrarProblema()
         }
 
         if (savedInstanceState != null) {
@@ -95,8 +121,36 @@ class CadastroProblemaActivity : AppCompatActivity(), OnMapReadyCallback, Google
                 Manifest.permission.ACCESS_FINE_LOCATION)
 
 
+    }
 
+    fun cadastrarProblema(){
+        mProgressBar!!.setMessage("Cadastrando o problema...")
+        mProgressBar!!.show()
+        val db : DatabaseReference = FirebaseDatabase.getInstance().getReference("geo/providers")
+        geofire = GeoFire(db)
+        var timeMillisId : Long = 0
+        var tituloProblema = findViewById<EditText>(R.id.problema)
+        var pReferencia = findViewById<EditText>(R.id.referencia)
 
+        timeMillisId = System.currentTimeMillis()
+
+        geofire!!.setLocation(db.push().key, GeoLocation(latitude, longitude), GeoFire.CompletionListener { key, error ->
+            if (error == null) {
+                Log.i("TAG", "geo added successful: " + key)
+                //Save detail
+                val moreDataProvider: HashMap<String, Any> = hashMapOf("tituloProblema" to tituloProblema.text.toString(), "pontoReferencia" to pReferencia.text.toString(), "imagem" to file64)
+                db!!.child("details").child(key).setValue(moreDataProvider)
+                mProgressBar!!.hide()
+                finish()
+
+            }else {
+                Log.i("TAG", "geo added error: " + error.message)
+                mProgressBar!!.hide()
+            }
+        })
+
+        //### listener for disconnect
+        //db.child(timeMillisId.toString()).onDisconnect().removeValue()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -136,6 +190,10 @@ class CadastroProblemaActivity : AppCompatActivity(), OnMapReadyCallback, Google
     // Atualiza a imagem na tela
     private fun showImage(file: File?) {
         if (file != null && file.exists()) {
+
+            val bytes = file!!.readBytes()
+            file64 = Base64.encodeToString(bytes, Base64.NO_WRAP)
+
             val w = imgView.width
             val h = imgView.height
             // (*5*) Redimensiona a imagem para o tamanho do ImageView
@@ -187,6 +245,10 @@ class CadastroProblemaActivity : AppCompatActivity(), OnMapReadyCallback, Google
 
     override fun onStart() {
         super.onStart()
+
+        if(fbUser == null){
+            startActivity(Intent(this@CadastroProblemaActivity, LoginActivity::class.java))
+        }
         // Conecta no Google Play Services
         mGoogleApiClient?.connect()
     }
@@ -241,6 +303,8 @@ class CadastroProblemaActivity : AppCompatActivity(), OnMapReadyCallback, Google
     // Atualiza a coordenada do mapa
     private fun setMapLocation(l: Location) {
         if (map != null) {
+            latitude = l.latitude
+            longitude = l.longitude
             val latLng = LatLng(l.latitude, l.longitude)
             val update = CameraUpdateFactory.newLatLngZoom(latLng, 15f)
             map?.animateCamera(update)

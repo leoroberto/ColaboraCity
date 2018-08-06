@@ -49,6 +49,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="16dp"
+                        android:text="Descreva as informações do problema"
                         android:ellipsize="end"
                         android:textSize="16sp" />
 
@@ -63,13 +64,13 @@
                         android:textSize="16sp" />
 
                     <EditText
-                        android:id="@+id/Nome"
+                        android:id="@+id/referencia"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="10dp"
                         android:ellipsize="end"
-                        android:hint="Name"
+                        android:hint="Ponto de referência"
                         android:textSize="16sp" />
                 </LinearLayout>
             </android.support.v7.widget.CardView>

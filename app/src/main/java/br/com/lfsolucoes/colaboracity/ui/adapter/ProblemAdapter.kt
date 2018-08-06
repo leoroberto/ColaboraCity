@@ -32,11 +32,12 @@ class ProblemListAdapter(private val problems: List<Problem>,
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindView(problem: Problem) {
-            val title = itemView.problem_item_title
-            val description = itemView.problem_item_description
+            val problema = itemView.problema_item
+            val pontoReferencia = itemView.problema_item_referencia
+            val imagem = itemView.problema_item_imagem
 
-            title.text = problem.titulo
-            description.text = problem.descricao
+            problema.text = problem.problema
+            pontoReferencia.text = problem.pontoReferencia
         }
 
     }
